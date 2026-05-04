@@ -36,6 +36,31 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'IntellMe
 // Socket.io
 require('./sockets/meetingSocket')(io);
 
+// Global error handler middleware
+app.use((err, req, res, next) => {
+  console.error('❌ Error:', err.message);
+  res.status(err.status || 500).json({
+    message: 'Server error',
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error',
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
+
+// Unhandled rejection handler
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+// Uncaught exception handler
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+  process.exit(1);
+});
+
 // MongoDB connection
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/intellmeet';
@@ -55,5 +80,15 @@ mongoose
       console.log(`🚀 IntellMeet server running on port ${PORT} (mock mode)`);
     });
   });
+
+// Server error handlers
+server.on('error', (err) => {
+  console.error('❌ Server error:', err.message);
+});
+
+server.on('clientError', (err, socket) => {
+  console.error('❌ Client error:', err.message);
+  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+});
 
 module.exports = { app, io };

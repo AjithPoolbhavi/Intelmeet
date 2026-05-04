@@ -26,113 +26,158 @@ module.exports = (io) => {
 
     // Join meeting room
     socket.on('join-room', ({ meetingId, userName }) => {
-      socket.join(meetingId);
+      try {
+        socket.join(meetingId);
 
-      if (!rooms.has(meetingId)) rooms.set(meetingId, new Set());
-      rooms.get(meetingId).add(socket.id);
+        if (!rooms.has(meetingId)) rooms.set(meetingId, new Set());
+        rooms.get(meetingId).add(socket.id);
 
-      participants.set(socket.id, { userId: socket.userId, name: userName, meetingId });
+        participants.set(socket.id, { userId: socket.userId, name: userName, meetingId });
 
-      // Get all participants in room
-      const roomParticipants = getRoomParticipants(meetingId);
+        // Get all participants in room
+        const roomParticipants = getRoomParticipants(meetingId);
 
-      // Notify others
-      socket.to(meetingId).emit('user-joined', {
-        socketId: socket.id,
-        userId: socket.userId,
-        name: userName,
-        participants: roomParticipants,
-      });
+        // Notify others
+        socket.to(meetingId).emit('user-joined', {
+          socketId: socket.id,
+          userId: socket.userId,
+          name: userName,
+          participants: roomParticipants,
+        });
 
-      // Send current participants to the new joiner
-      socket.emit('room-participants', { participants: roomParticipants });
+        // Send current participants to the new joiner
+        socket.emit('room-participants', { participants: roomParticipants });
 
-      console.log(`${userName} joined room ${meetingId}`);
+        console.log(`${userName} joined room ${meetingId}`);
+      } catch (err) {
+        console.error('Error in join-room:', err.message);
+      }
     });
 
     // WebRTC signaling
     socket.on('offer', ({ targetId, offer, fromName }) => {
-      io.to(targetId).emit('offer', { fromId: socket.id, offer, fromName });
+      try {
+        io.to(targetId).emit('offer', { fromId: socket.id, offer, fromName });
+      } catch (err) {
+        console.error('Error in offer:', err.message);
+      }
     });
 
     socket.on('answer', ({ targetId, answer }) => {
-      io.to(targetId).emit('answer', { fromId: socket.id, answer });
+      try {
+        io.to(targetId).emit('answer', { fromId: socket.id, answer });
+      } catch (err) {
+        console.error('Error in answer:', err.message);
+      }
     });
 
     socket.on('ice-candidate', ({ targetId, candidate }) => {
-      io.to(targetId).emit('ice-candidate', { fromId: socket.id, candidate });
+      try {
+        io.to(targetId).emit('ice-candidate', { fromId: socket.id, candidate });
+      } catch (err) {
+        console.error('Error in ice-candidate:', err.message);
+      }
     });
 
     // Chat messages
     socket.on('send-message', ({ meetingId, content, senderName }) => {
-      const message = {
-        id: Date.now().toString(),
-        senderId: socket.userId,
-        senderName,
-        content,
-        timestamp: new Date().toISOString(),
-      };
-      io.to(meetingId).emit('receive-message', message);
+      try {
+        const message = {
+          id: Date.now().toString(),
+          senderId: socket.userId,
+          senderName,
+          content,
+          timestamp: new Date().toISOString(),
+        };
+        io.to(meetingId).emit('receive-message', message);
+      } catch (err) {
+        console.error('Error in send-message:', err.message);
+      }
     });
 
     // Media state changes
     socket.on('media-state', ({ meetingId, audio, video }) => {
-      socket.to(meetingId).emit('participant-media-state', {
-        socketId: socket.id,
-        audio,
-        video,
-      });
+      try {
+        socket.to(meetingId).emit('participant-media-state', {
+          socketId: socket.id,
+          audio,
+          video,
+        });
+      } catch (err) {
+        console.error('Error in media-state:', err.message);
+      }
     });
 
     // Screen share
     socket.on('screen-share-started', ({ meetingId }) => {
-      socket.to(meetingId).emit('participant-screen-share', {
-        socketId: socket.id,
-        sharing: true,
-      });
+      try {
+        socket.to(meetingId).emit('participant-screen-share', {
+          socketId: socket.id,
+          sharing: true,
+        });
+      } catch (err) {
+        console.error('Error in screen-share-started:', err.message);
+      }
     });
 
     socket.on('screen-share-stopped', ({ meetingId }) => {
-      socket.to(meetingId).emit('participant-screen-share', {
-        socketId: socket.id,
-        sharing: false,
-      });
+      try {
+        socket.to(meetingId).emit('participant-screen-share', {
+          socketId: socket.id,
+          sharing: false,
+        });
+      } catch (err) {
+        console.error('Error in screen-share-stopped:', err.message);
+      }
     });
 
     // Disconnect
     socket.on('disconnect', () => {
-      const participant = participants.get(socket.id);
-      if (participant) {
-        const { meetingId, name } = participant;
+      try {
+        const participant = participants.get(socket.id);
+        if (participant) {
+          const { meetingId, name } = participant;
+          if (rooms.has(meetingId)) {
+            rooms.get(meetingId).delete(socket.id);
+            if (rooms.get(meetingId).size === 0) rooms.delete(meetingId);
+          }
+          participants.delete(socket.id);
+
+          io.to(meetingId).emit('user-left', {
+            socketId: socket.id,
+            name,
+            participants: getRoomParticipants(meetingId),
+          });
+
+          console.log(`${name} left room ${meetingId}`);
+        }
+      } catch (err) {
+        console.error('Error in disconnect:', err.message);
+      }
+    });
+
+    socket.on('leave-room', ({ meetingId }) => {
+      try {
+        const participant = participants.get(socket.id);
+        socket.leave(meetingId);
         if (rooms.has(meetingId)) {
           rooms.get(meetingId).delete(socket.id);
-          if (rooms.get(meetingId).size === 0) rooms.delete(meetingId);
         }
         participants.delete(socket.id);
 
         io.to(meetingId).emit('user-left', {
           socketId: socket.id,
-          name,
+          name: participant?.name || 'Unknown',
           participants: getRoomParticipants(meetingId),
         });
-
-        console.log(`${name} left room ${meetingId}`);
+      } catch (err) {
+        console.error('Error in leave-room:', err.message);
       }
     });
 
-    socket.on('leave-room', ({ meetingId }) => {
-      const participant = participants.get(socket.id);
-      socket.leave(meetingId);
-      if (rooms.has(meetingId)) {
-        rooms.get(meetingId).delete(socket.id);
-      }
-      participants.delete(socket.id);
-
-      io.to(meetingId).emit('user-left', {
-        socketId: socket.id,
-        name: participant?.name || 'Unknown',
-        participants: getRoomParticipants(meetingId),
-      });
+    // Global socket error handler
+    socket.on('error', (err) => {
+      console.error('Socket error:', err.message);
     });
   });
 
