@@ -1,0 +1,11 @@
+{
+  "name": "intellmeet",
+  "version": "1.0.0",
+  "description": "IntellMeet - AI-Powered Enterprise Video Meeting Platform",
+  "scripts": {
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "setup": "bash setup.sh"
+  }
+}
