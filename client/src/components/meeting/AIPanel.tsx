@@ -1,21 +1,30 @@
 import { useState } from 'react';
 import { Bot, Loader2, CheckCircle2, Sparkles, RefreshCw } from 'lucide-react';
-import { aiApi } from '../../services/api';
+import { aiAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 import { AISummary } from '../../types';
 
 interface AIPanelProps {
   meetingId: string;
+  meetingTitle?: string;
+  duration?: number;
+  participantCount?: number;
+  chatMessages?: string[];
 }
 
-export default function AIPanel({ meetingId }: AIPanelProps) {
+export default function AIPanel({ meetingId, meetingTitle, duration, participantCount, chatMessages }: AIPanelProps) {
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState<AISummary | null>(null);
 
   const generate = async () => {
     setLoading(true);
     try {
-      const { data } = await aiApi.generateSummary({ meetingId });
+      const { data } = await aiAPI.generateSummary({
+        meetingTitle,
+        duration,
+        participantCount,
+        chatMessages,
+      });
       setSummary(data);
       toast.success('AI summary generated!');
     } catch (err) {
@@ -74,7 +83,7 @@ export default function AIPanel({ meetingId }: AIPanelProps) {
             <div>
               <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">Action Items</h4>
               <div className="space-y-2">
-                {summary.actionItems.map((item, i) => (
+                {summary.actionItems.map((item: string, i: number) => (
                   <div key={i} className="flex items-start gap-2 p-2 bg-surface-700 rounded-lg">
                     <CheckCircle2 size={14} className="text-brand-400 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-white/80">{item}</p>

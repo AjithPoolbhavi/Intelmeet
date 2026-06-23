@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
 
 // In-memory store for mock mode (when MongoDB is not available)
 const mockUsers = new Map();
@@ -8,6 +9,8 @@ let User;
 try {
   User = require('../models/User');
 } catch (e) {}
+
+const isDbConnected = () => mongoose.connection && mongoose.connection.readyState === 1;
 
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET || 'intellmeet_secret', { expiresIn: '7d' });
@@ -22,7 +25,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'Password must be at least 6 characters' });
 
     // Try MongoDB first
-    if (User) {
+    if (User && isDbConnected()) {
       try {
         const existing = await User.findOne({ email });
         if (existing) return res.status(400).json({ message: 'Email already registered' });
@@ -54,7 +57,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Email and password are required' });
 
     // Try MongoDB first
-    if (User) {
+    if (User && isDbConnected()) {
       try {
         const user = await User.findOne({ email });
         if (user) {
@@ -82,7 +85,7 @@ exports.login = async (req, res) => {
 
 exports.getMe = async (req, res) => {
   try {
-    if (User) {
+    if (User && isDbConnected()) {
       try {
         const user = await User.findById(req.user.id).select('-password');
         if (user) return res.json({ user: { id: user._id, name: user.name, email: user.email } });

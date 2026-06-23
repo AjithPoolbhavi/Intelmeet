@@ -1,12 +1,15 @@
 const mockTasks = new Map();
 let taskIdCounter = 1;
+const mongoose = require('mongoose');
 
 let Task;
 try { Task = require('../models/Task'); } catch(e) {}
 
+const isDbConnected = () => mongoose.connection && mongoose.connection.readyState === 1;
+
 exports.getTasks = async (req, res) => {
   try {
-    if (Task) {
+    if (Task && isDbConnected()) {
       try {
         const tasks = await Task.find({ owner: req.user.id }).sort({ createdAt: -1 });
         return res.json({ tasks });
@@ -31,7 +34,7 @@ exports.createTask = async (req, res) => {
       meetingRef: meetingRef || null, createdAt: new Date(),
     };
 
-    if (Task) {
+    if (Task && isDbConnected()) {
       try {
         const task = await Task.create(taskData);
         return res.status(201).json({ task });
@@ -52,7 +55,7 @@ exports.updateTask = async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 
-    if (Task) {
+    if (Task && isDbConnected()) {
       try {
         const task = await Task.findByIdAndUpdate(id, updates, { new: true });
         if (task) return res.json({ task });
@@ -72,7 +75,7 @@ exports.updateTask = async (req, res) => {
 exports.deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
-    if (Task) {
+    if (Task && isDbConnected()) {
       try {
         await Task.findByIdAndDelete(id);
         return res.json({ success: true });

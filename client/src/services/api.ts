@@ -36,7 +36,7 @@ export const authAPI = {
 
 // Meetings
 export const meetingsAPI = {
-  create: (data: { title: string; tags?: string[] }) =>
+  create: (data: { title: string; tags?: string[]; status?: string; startTime?: string }) =>
     api.post('/meetings/create', data),
   getById: (meetingId: string) => api.get(`/meetings/${meetingId}`),
   getUserMeetings: (userId: string) => api.get(`/meetings/user/${userId}`),

@@ -11,6 +11,7 @@ import MeetingControls from '../components/meeting/MeetingControls';
 import VideoGrid from '../components/meeting/VideoGrid';
 import ChatPanel from '../components/meeting/ChatPanel';
 import ParticipantsPanel from '../components/meeting/ParticipantsPanel';
+import SettingsPanel from '../components/meeting/SettingsPanel';
 import MeetingTopBar from '../components/meeting/MeetingTopBar';
 import { Loader2 } from 'lucide-react';
 
@@ -20,8 +21,8 @@ export default function MeetingPage() {
   const { user, token } = useAuthStore();
   const {
     setCurrentMeeting, setParticipants, addParticipant, removeParticipant,
-    addMessage, isChatOpen, isParticipantsOpen, isAudioOn, isVideoOn,
-    localStream, reset,
+    addMessage, isChatOpen, isParticipantsOpen, isSettingsOpen,
+    isAudioOn, isVideoOn, localStream, reactions, reset,
   } = useMeetingStore();
 
   const socketRef = useRef<Socket | null>(null);
@@ -89,6 +90,16 @@ export default function MeetingPage() {
         addMessage(message);
       });
 
+      // Reactions from remote
+      socket.on('receive-reaction', ({ emoji, userName }: { emoji: string; userName: string }) => {
+        toast(`${userName} reacted ${emoji}`, { duration: 2000 });
+      });
+
+      // Raise hand
+      socket.on('hand-raised', ({ userName }: { userName: string }) => {
+        toast(`${userName} raised their hand ✋`, { duration: 3000 });
+      });
+
       setLoading(false);
     } catch (err) {
       console.error('Meeting setup error:', err);
@@ -129,9 +140,11 @@ export default function MeetingPage() {
     }
   }, [meetingId, stopLocalStream, reset, navigate]);
 
+  const hasSidepanel = isChatOpen || isParticipantsOpen || isSettingsOpen;
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-surface-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[#1c1c1c] flex items-center justify-center">
         <div className="text-center">
           <Loader2 size={32} className="animate-spin text-brand-400 mx-auto mb-3" />
           <p className="text-slate-400">Joining meeting...</p>
@@ -141,12 +154,16 @@ export default function MeetingPage() {
   }
 
   return (
-    <div className="h-screen bg-surface-900 flex flex-col overflow-hidden">
+    <div style={{
+      height: '100vh', background: '#0d0d0f',
+      display: 'flex', flexDirection: 'column', overflow: 'hidden',
+      fontFamily: "'Inter', system-ui, sans-serif",
+    }}>
       <MeetingTopBar meetingId={meetingId || ''} socket={socketRef.current} />
 
-      <div className="flex flex-1 overflow-hidden">
+      <div style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative' }}>
         {/* Main video area */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <VideoGrid remoteStreams={remoteStreams} />
           <MeetingControls
             meetingId={meetingId || ''}
@@ -156,21 +173,46 @@ export default function MeetingPage() {
         </div>
 
         {/* Sidepanel */}
-        {(isChatOpen || isParticipantsOpen) && (
-          <div className="w-80 border-l border-surface-600 flex flex-col animate-slide-up bg-surface-800">
-            {isChatOpen && (
-              <ChatPanel meetingId={meetingId || ''} socket={socketRef.current} />
-            )}
+        {hasSidepanel && (
+          <div style={{
+            width: 320, flexShrink: 0,
+            borderLeft: '1px solid rgba(255,255,255,0.07)',
+            display: 'flex', flexDirection: 'column',
+            background: '#18181b',
+            animation: 'slideInRight 0.22s ease-out both',
+          }}>
+            {isChatOpen && <ChatPanel meetingId={meetingId || ''} socket={socketRef.current} />}
             {isParticipantsOpen && <ParticipantsPanel />}
+            {isSettingsOpen && <SettingsPanel />}
           </div>
         )}
+
+        {/* Floating Reactions */}
+        <div style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 20 }}>
+          {reactions.map((r) => (
+            <div
+              key={r.id}
+              style={{
+                position: 'absolute', bottom: 96, left: `${r.x}%`,
+                animation: 'reactionFloat 3.5s ease-out forwards',
+              }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: 52, filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.5))', userSelect: 'none' }}>{r.emoji}</span>
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)', borderRadius: 20, padding: '2px 10px' }}>
+                  {r.name}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {leaving && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="glass-strong rounded-2xl p-8 text-center">
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
+          <div style={{ background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 20, padding: '32px 40px', textAlign: 'center', boxShadow: '0 24px 64px rgba(0,0,0,0.6)' }}>
             <Loader2 size={32} className="animate-spin text-brand-400 mx-auto mb-3" />
-            <p className="text-white font-medium">Leaving meeting...</p>
+            <p style={{ color: '#fff', fontWeight: 600, margin: '12px 0 0', fontSize: 15 }}>Leaving meeting…</p>
           </div>
         </div>
       )}

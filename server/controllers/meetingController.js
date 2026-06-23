@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const mongoose = require('mongoose');
 
 // In-memory store for mock mode
 const mockMeetings = new Map();
@@ -6,11 +7,13 @@ const mockMeetings = new Map();
 let Meeting;
 try { Meeting = require('../models/Meeting'); } catch(e) {}
 
+const isDbConnected = () => mongoose.connection && mongoose.connection.readyState === 1;
+
 const generateMeetingId = () => uuidv4().substring(0, 8).toUpperCase();
 
 exports.createMeeting = async (req, res) => {
   try {
-    const { title, tags } = req.body;
+    const { title, tags, status, startTime } = req.body;
     if (!title) return res.status(400).json({ message: 'Meeting title is required' });
 
     const meetingData = {
@@ -18,14 +21,14 @@ exports.createMeeting = async (req, res) => {
       title,
       host: req.user.id,
       hostName: req.user.name || 'Host',
-      status: 'active',
-      startTime: new Date(),
+      status: status || 'active',
+      startTime: startTime ? new Date(startTime) : new Date(),
       participants: [],
       messages: [],
       tags: tags || [],
     };
 
-    if (Meeting) {
+    if (Meeting && isDbConnected()) {
       try {
         const meeting = await Meeting.create(meetingData);
         return res.status(201).json({ meeting });
@@ -46,7 +49,7 @@ exports.getMeeting = async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (Meeting) {
+    if (Meeting && isDbConnected()) {
       try {
         const meeting = await Meeting.findOne({ meetingId: id }).populate('host', 'name email');
         if (meeting) return res.json({ meeting });
@@ -65,7 +68,7 @@ exports.getUserMeetings = async (req, res) => {
   try {
     const userId = req.params.userId;
 
-    if (Meeting) {
+    if (Meeting && isDbConnected()) {
       try {
         const meetings = await Meeting.find({ host: userId }).sort({ createdAt: -1 }).limit(20);
         if (meetings) return res.json({ meetings });
@@ -85,7 +88,7 @@ exports.endMeeting = async (req, res) => {
     const { id } = req.params;
     const endTime = new Date();
 
-    if (Meeting) {
+    if (Meeting && isDbConnected()) {
       try {
         const meeting = await Meeting.findOne({ meetingId: id });
         if (meeting) {
@@ -116,7 +119,7 @@ exports.saveSummary = async (req, res) => {
     const { id } = req.params;
     const { summary, actionItems } = req.body;
 
-    if (Meeting) {
+    if (Meeting && isDbConnected()) {
       try {
         const meeting = await Meeting.findOneAndUpdate(
           { meetingId: id },

@@ -1,0 +1,850 @@
+/* Premium Global Styles */
+
+/* ============================================
+   1. RESET & BASE STYLES
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Inter', 'system-ui', 'sans-serif';
+  color: #111827;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+body.dark {
+  color: #f8fafc;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* ============================================
+   2. TYPOGRAPHY
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 3.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h3 {
+  font-size: 1.875rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin-bottom: 1rem;
+  color: #4b5563;
+}
+
+body.dark p {
+  color: #cbd5e1;
+}
+
+a {
+  color: #8b5cf6;
+  text-decoration: none;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+a:hover {
+  color: #6d28d9;
+  text-decoration: underline;
+}
+
+body.dark a:hover {
+  color: #a78bfa;
+}
+
+/* ============================================
+   3. ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
+  }
+}
+
+/* ============================================
+   4. UTILITY CLASSES
+   ============================================ */
+
+.animate-fade-in {
+  animation: fadeIn 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-fade-out {
+  animation: fadeOut 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* ============================================
+   5. GLASS MORPHISM
+   ============================================ */
+
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .glass {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   6. SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: background 200ms;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+body.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+body.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* ============================================
+   7. FOCUS STATES
+   ============================================ */
+
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+a:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1), 0 0 0 5px rgba(139, 92, 246, 0.3);
+}
+
+/* ============================================
+   8. SELECTION
+   ============================================ */
+
+::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: #111827;
+}
+
+body.dark ::selection {
+  background: rgba(139, 92, 246, 0.5);
+  color: #f8fafc;
+}
+
+/* ============================================
+   9. RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.25rem;
+  }
+
+  h2 {
+    font-size: 1.875rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  body {
+    font-size: 15px;
+  }
+}
+
+/* ============================================
+   10. MEETING ROOM STYLES
+   ============================================ */
+
+/* Meeting room layout */
+.meeting-room-root {
+  height: 100vh;
+  background: #111113;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Control bar - Zoom-like bottom bar */
+.meeting-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 80px;
+  background: #1c1c1e;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+/* Control button base */
+.ctrl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.ctrl-btn:active {
+  transform: scale(0.88);
+}
+
+.ctrl-btn-default {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+}
+
+.ctrl-btn-default:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.ctrl-btn-off {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  ring: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.ctrl-btn-off:hover {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+/* Leave button */
+.leave-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.leave-btn:hover {
+  background: #ef4444;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.4);
+}
+
+.leave-btn:active {
+  transform: scale(0.95) translateY(0);
+}
+
+/* Reactions popup */
+.reactions-popup {
+  display: flex;
+  gap: 4px;
+  background: #2a2a2e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 8px 12px;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.2s ease-out forwards;
+  white-space: nowrap;
+}
+
+.reaction-emoji-btn {
+  font-size: 24px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.12s ease;
+  line-height: 1;
+}
+
+.reaction-emoji-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.35) translateY(-4px);
+}
+
+.reaction-emoji-btn:active {
+  transform: scale(1.1);
+}
+
+/* Sidepanel */
+.meeting-side-panel {
+  width: 320px;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  background: #1c1c1e;
+  animation: slideInRight 0.2s ease-out forwards;
+  flex-shrink: 0;
+}
+
+/* Floating reaction */
+.animate-reaction-float {
+  animation: reactionFloat 3.5s ease-out forwards;
+}
+
+@keyframes reactionFloat {
+  0%   { opacity: 0; transform: translateY(0) scale(0.5); }
+  15%  { opacity: 1; transform: translateY(-20px) scale(1.2); }
+  80%  { opacity: 1; transform: translateY(-180px) scale(1); }
+  100% { opacity: 0; transform: translateY(-240px) scale(0.8); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Settings panel styles */
+.settings-select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.settings-select:hover,
+.settings-select:focus {
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+.settings-slider {
+  width: 100%;
+  appearance: none;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+}
+
+.settings-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #6366f1;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  transition: box-shadow 0.15s ease;
+}
+
+.settings-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.35);
+}
+
+/* Slide-up animation for chat new messages */
+.animate-slide-up {
+  animation: slideInUp 0.25s ease-out forwards;
+}
+
+/* ============================================
+   11. PREMIUM VIDEO GRID
+   ============================================ */
+
+.video-grid {
+  flex: 1;
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  overflow: hidden;
+  background: #0e0e10;
+}
+
+.video-grid-1  { grid-template-columns: 1fr; }
+.video-grid-2  { grid-template-columns: repeat(2, 1fr); }
+.video-grid-3  { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); }
+.video-grid-4  { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); }
+.video-grid-5plus { grid-template-columns: repeat(3, 1fr); }
+
+/* Video tile */
+.video-tile {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #1a1a1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s ease;
+  cursor: default;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.video-tile:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Speaking indicator */
+.video-tile-speaking {
+  box-shadow: 0 0 0 2.5px #6366f1, 0 0 24px rgba(99, 102, 241, 0.25);
+}
+
+/* Screen sharing tile */
+.video-tile-screenshare {
+  box-shadow: 0 0 0 2.5px #10b981, 0 0 24px rgba(16, 185, 129, 0.2);
+}
+
+/* Avatar background */
+.video-tile-avatar-bg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: radial-gradient(ellipse at center, #1e1e24 0%, #111113 100%);
+}
+
+/* Bottom gradient overlay */
+.video-tile-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.15) 35%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* Bottom info strip */
+.video-tile-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 8px 10px 10px;
+  z-index: 5;
+}
+
+/* Icon button in tile */
+.video-tile-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.video-tile-icon-btn:hover {
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* Dropdown menu item */
+.video-tile-menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 7px 14px;
+  font-size: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #cbd5e1;
+  transition: background 0.1s;
+}
+
+.video-tile-menu-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+
+/* ============================================
+   12. PREMIUM CHAT PANEL
+   ============================================ */
+
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #18181b;
+}
+
+.chat-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+/* Chat bubbles */
+.chat-bubble {
+  padding: 9px 13px;
+  border-radius: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.chat-bubble-me {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.3);
+}
+
+.chat-bubble-them {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #e2e8f0;
+  border-bottom-left-radius: 4px;
+}
+
+/* Chat input bar */
+.chat-input-bar {
+  padding: 10px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+  background: #18181b;
+}
+
+.chat-input-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  padding: 4px 6px 4px 4px;
+  transition: border-color 0.2s;
+}
+
+.chat-input-form:focus-within {
+  border-color: rgba(99, 102, 241, 0.45);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.chat-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e2e8f0;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  padding: 6px 4px;
+  min-width: 0;
+}
+
+.chat-input::placeholder {
+  color: #4b5563;
+}
+
+/* Typing dots animation */
+.typing-dots::before {
+  content: '···';
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: #6b7280;
+  animation: typingPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes typingPulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1; }
+}
+
+/* ============================================
+   13. PREMIUM PARTICIPANTS PANEL
+   ============================================ */
+
+.participants-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #18181b;
+}
+
+.participants-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+/* Participant row */
+.participant-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  transition: background 0.15s ease;
+}
+
+.participant-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Thin scrollbar inside panels */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 3px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   14. MISC MEETING UTILS
+   ============================================ */
+
+/* Pulse slow (for avatar glow) */
+@keyframes pulseSlow {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50%       { opacity: 0.3;  transform: scale(1.15); }
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 3s ease-in-out infinite;
+}

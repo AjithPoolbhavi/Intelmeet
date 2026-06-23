@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, ArrowRight, User, Mail, Lock, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Logo from '../components/ui/Logo';
 import { authAPI } from '../services/api';
 import { useAuthStore } from '../store/authStore';
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+}
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -12,11 +18,47 @@ export default function RegisterPage() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+
+  const validateForm = () => {
+    const newErrors: FormErrors = {};
+    
+    if (!form.name.trim()) {
+      newErrors.name = 'Full name is required';
+    } else if (form.name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters';
+    }
+    
+    if (!form.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    
+    if (!form.password) {
+      newErrors.password = 'Password is required';
+    } else if (form.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.password) return toast.error('All fields required');
-    if (form.password.length < 6) return toast.error('Password must be 6+ characters');
+    
+    if (!validateForm()) {
+      toast.error('Please fix the errors below');
+      return;
+    }
+
+    if (!agreedToTerms) {
+      toast.error('Please agree to the terms and conditions');
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await authAPI.register(form);
@@ -24,61 +66,222 @@ export default function RegisterPage() {
       toast.success(`Welcome to IntellMeet, ${res.data.user.name}!`);
       navigate('/dashboard');
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Registration failed');
+      const errorMsg = err.response?.data?.message || 'Registration failed';
+      toast.error(errorMsg);
+      if (errorMsg.toLowerCase().includes('email')) {
+        setErrors(e => ({ ...e, email: errorMsg }));
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  const handleInputChange = (field: 'name' | 'email' | 'password', value: string) => {
+    setForm(f => ({ ...f, [field]: value }));
+    if (errors[field]) {
+      setErrors(e => ({ ...e, [field]: undefined }));
+    }
+  };
+
+  const passwordStrength = form.password.length >= 6 ? 'strong' : form.password.length >= 3 ? 'medium' : 'weak';
+
   return (
-    <div className="min-h-screen bg-surface-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated Background Blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brand-600/10 rounded-full blur-[120px]" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brand-600/15 rounded-full blur-[120px] animate-blob" />
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px] animate-pulse-slow" />
+        <div className="absolute top-1/2 -left-32 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px]" />
       </div>
 
-      <div className="w-full max-w-md relative animate-fade-in">
-        <div className="glass-strong rounded-2xl p-8 shadow-2xl">
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4"><Logo size="lg" /></div>
-            <h1 className="text-2xl font-bold text-white mt-4">Create your account</h1>
-            <p className="text-slate-400 text-sm mt-1">Start collaborating with IntellMeet</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Full Name</label>
-              <input className="input" type="text" placeholder="Jane Smith"
-                value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
-              <input className="input" type="email" placeholder="jane@company.com"
-                value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
-              <div className="relative">
-                <input className="input pr-11" type={showPass ? 'text' : 'password'}
-                  placeholder="Min. 6 characters" value={form.password}
-                  onChange={e => setForm(f => ({ ...f, password: e.target.value }))} />
-                <button type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
-                  onClick={() => setShowPass(v => !v)}>
-                  {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
+      {/* Main Container */}
+      <div className="w-full max-w-md relative z-10 animate-scale-in">
+        {/* Card */}
+        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8 shadow-2xl hover:shadow-2xl transition-shadow duration-300">
+          {/* Header */}
+          <div className="text-center mb-10">
+            <div className="flex justify-center mb-6 transform hover:scale-110 transition-transform duration-300">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-brand-600 to-brand-700 shadow-lg shadow-brand-600/20">
+                <Logo size="lg" />
               </div>
             </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2">
+              Create Account
+            </h1>
+            <p className="text-slate-400 text-sm">Join thousands of professionals using IntellMeet</p>
+          </div>
 
-            <button type="submit" className="btn-primary w-full py-2.5 flex items-center justify-center gap-2 mt-2" disabled={loading}>
-              {loading && <Loader2 size={16} className="animate-spin" />}
-              {loading ? 'Creating account...' : 'Create Account'}
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name Field */}
+            <div className="animate-slide-in-up" style={{ animationDelay: '100ms' }}>
+              <label className="block text-sm font-semibold text-slate-200 mb-2">Full Name</label>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-600/0 to-cyan-500/0 group-focus-within:from-brand-600/10 group-focus-within:to-cyan-500/10 rounded-lg transition-all duration-300" />
+                <div className="relative flex items-center">
+                  <User size={18} className="absolute left-3.5 text-slate-500 group-focus-within:text-brand-400 transition-colors" />
+                  <input
+                    type="text"
+                    placeholder="Jane Smith"
+                    value={form.name}
+                    onChange={e => handleInputChange('name', e.target.value)}
+                    onFocus={() => setErrors(e => ({ ...e, name: undefined }))}
+                    className={`w-full pl-11 pr-4 py-3 bg-white/5 border rounded-lg text-white placeholder-slate-500 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:bg-white/10 ${
+                      errors.name ? 'border-red-500/50 bg-red-500/5' : 'border-white/10 hover:border-white/20'
+                    }`}
+                  />
+                </div>
+              </div>
+              {errors.name && (
+                <p className="text-red-400 text-xs mt-2 flex items-center gap-1 animate-slide-in-down">
+                  <span className="w-1 h-1 rounded-full bg-red-400" />
+                  {errors.name}
+                </p>
+              )}
+            </div>
+
+            {/* Email Field */}
+            <div className="animate-slide-in-up" style={{ animationDelay: '150ms' }}>
+              <label className="block text-sm font-semibold text-slate-200 mb-2">Email Address</label>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-600/0 to-cyan-500/0 group-focus-within:from-brand-600/10 group-focus-within:to-cyan-500/10 rounded-lg transition-all duration-300" />
+                <div className="relative flex items-center">
+                  <Mail size={18} className="absolute left-3.5 text-slate-500 group-focus-within:text-brand-400 transition-colors" />
+                  <input
+                    type="email"
+                    placeholder="jane@company.com"
+                    value={form.email}
+                    onChange={e => handleInputChange('email', e.target.value)}
+                    onFocus={() => setErrors(e => ({ ...e, email: undefined }))}
+                    className={`w-full pl-11 pr-4 py-3 bg-white/5 border rounded-lg text-white placeholder-slate-500 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:bg-white/10 ${
+                      errors.email ? 'border-red-500/50 bg-red-500/5' : 'border-white/10 hover:border-white/20'
+                    }`}
+                  />
+                </div>
+              </div>
+              {errors.email && (
+                <p className="text-red-400 text-xs mt-2 flex items-center gap-1 animate-slide-in-down">
+                  <span className="w-1 h-1 rounded-full bg-red-400" />
+                  {errors.email}
+                </p>
+              )}
+            </div>
+
+            {/* Password Field */}
+            <div className="animate-slide-in-up" style={{ animationDelay: '200ms' }}>
+              <label className="block text-sm font-semibold text-slate-200 mb-2">Password</label>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-600/0 to-cyan-500/0 group-focus-within:from-brand-600/10 group-focus-within:to-cyan-500/10 rounded-lg transition-all duration-300" />
+                <div className="relative flex items-center">
+                  <Lock size={18} className="absolute left-3.5 text-slate-500 group-focus-within:text-brand-400 transition-colors" />
+                  <input
+                    type={showPass ? 'text' : 'password'}
+                    placeholder="Min. 6 characters"
+                    value={form.password}
+                    onChange={e => handleInputChange('password', e.target.value)}
+                    onFocus={() => setErrors(e => ({ ...e, password: undefined }))}
+                    className={`w-full pl-11 pr-12 py-3 bg-white/5 border rounded-lg text-white placeholder-slate-500 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:bg-white/10 ${
+                      errors.password ? 'border-red-500/50 bg-red-500/5' : 'border-white/10 hover:border-white/20'
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPass(v => !v)}
+                    className="absolute right-3.5 text-slate-500 hover:text-slate-300 transition-colors focus:outline-none"
+                  >
+                    {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+              {form.password && (
+                <div className="mt-2 flex items-center gap-2">
+                  <div className="flex-1 flex gap-1">
+                    <div className={`h-1 rounded-full transition-all ${passwordStrength === 'weak' ? 'w-1/3 bg-red-500' : passwordStrength === 'medium' ? 'w-2/3 bg-yellow-500' : 'w-full bg-green-500'}`} />
+                  </div>
+                  <span className={`text-xs font-medium ${passwordStrength === 'weak' ? 'text-red-400' : passwordStrength === 'medium' ? 'text-yellow-400' : 'text-green-400'}`}>
+                    {passwordStrength === 'weak' ? 'Weak' : passwordStrength === 'medium' ? 'Medium' : 'Strong'}
+                  </span>
+                </div>
+              )}
+              {errors.password && (
+                <p className="text-red-400 text-xs mt-2 flex items-center gap-1 animate-slide-in-down">
+                  <span className="w-1 h-1 rounded-full bg-red-400" />
+                  {errors.password}
+                </p>
+              )}
+            </div>
+
+            {/* Terms Agreement */}
+            <div className="flex items-start gap-2.5 animate-slide-in-up" style={{ animationDelay: '250ms' }}>
+              <input
+                type="checkbox"
+                id="terms"
+                checked={agreedToTerms}
+                onChange={e => setAgreedToTerms(e.target.checked)}
+                className="w-4 h-4 rounded border border-white/20 bg-white/5 accent-brand-500 cursor-pointer transition-all mt-1 flex-shrink-0"
+              />
+              <label htmlFor="terms" className="text-xs text-slate-400 cursor-pointer hover:text-slate-300 transition-colors">
+                I agree to the{' '}
+                <a href="#" className="text-brand-400 hover:text-brand-300 transition-colors">
+                  Terms of Service
+                </a>
+                {' '}and{' '}
+                <a href="#" className="text-brand-400 hover:text-brand-300 transition-colors">
+                  Privacy Policy
+                </a>
+              </label>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 px-4 bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 mt-6 shadow-lg shadow-brand-600/25 hover:shadow-xl hover:shadow-brand-600/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none animate-slide-in-up group"
+              style={{ animationDelay: '300ms' }}
+            >
+              {loading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  <span>Creating account...</span>
+                </>
+              ) : (
+                <>
+                  <span>Create Account</span>
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-6">
-            Already have an account?{' '}
-            <Link to="/login" className="text-brand-400 hover:text-brand-300 font-medium">Sign in</Link>
-          </p>
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-gradient-to-r from-white/0 to-white/10" />
+            <span className="text-xs text-slate-500 font-medium">Already a member?</span>
+            <div className="flex-1 h-px bg-gradient-to-l from-white/0 to-white/10" />
+          </div>
+
+          {/* Sign In Link */}
+          <Link
+            to="/login"
+            className="w-full py-3 px-4 border border-white/10 hover:border-brand-500/50 bg-white/5 hover:bg-brand-500/10 text-slate-300 hover:text-brand-300 font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group"
+          >
+            <span>Sign In Instead</span>
+            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+
+          {/* Features */}
+          <div className="mt-8 space-y-2 animate-fade-in" style={{ animationDelay: '350ms' }}>
+            {[
+              'AI-powered meeting summaries',
+              'Real-time collaboration',
+              'Secure video meetings'
+            ].map((feature, i) => (
+              <div key={i} className="flex items-center gap-2 text-xs text-slate-400">
+                <CheckCircle2 size={16} className="text-brand-400 flex-shrink-0" />
+                {feature}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -56,47 +56,51 @@ export default function PostMeetingPage() {
   return (
     <div className="flex min-h-screen bg-surface-900">
       <Sidebar />
-      <main className="flex-1 ml-64 p-8 max-w-4xl">
+      <main className="flex-1 ml-64 p-8 max-w-5xl">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-8 animate-fade-in">
-          <button onClick={() => navigate('/dashboard')} className="btn-ghost p-2">
-            <ArrowLeft size={18} />
+        <div className="flex items-center gap-4 mb-8 animate-fade-in">
+          <button onClick={() => navigate('/dashboard')} className="btn-ghost p-2 rounded-lg hover:bg-surface-700 transition-colors">
+            <ArrowLeft size={20} />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-white">Meeting Summary</h1>
-            <p className="text-slate-400 text-sm font-mono mt-0.5">{meetingId}</p>
+            <h1 className="text-3xl font-bold text-white">Meeting Summary</h1>
+            <p className="text-slate-500 text-sm font-mono mt-1">{meetingId}</p>
           </div>
         </div>
 
         {/* Recording placeholder */}
-        <div className="card mb-6 flex items-center gap-4 animate-slide-up">
-          <div className="w-12 h-12 rounded-xl bg-rose-500/20 flex items-center justify-center flex-shrink-0">
-            <div className="w-3 h-3 rounded-full bg-rose-500" />
+        <div className="card mb-6 flex items-center gap-4 animate-slide-up bg-gradient-to-r from-rose-600/20 to-rose-600/5 border-rose-600/40 hover:border-rose-500/60">
+          <div className="w-14 h-14 rounded-xl bg-rose-500/30 flex items-center justify-center flex-shrink-0">
+            <div className="w-3 h-3 rounded-full bg-rose-500 animate-pulse" />
           </div>
-          <div>
-            <p className="text-white font-medium">Meeting Recording</p>
-            <p className="text-slate-500 text-sm">Recording processing... will be available in a few minutes</p>
+          <div className="flex-1">
+            <p className="text-white font-semibold">Meeting Recording</p>
+            <p className="text-slate-500 text-sm">Processing... will be available in a few minutes</p>
           </div>
-          <button className="btn-secondary text-sm ml-auto flex items-center gap-2" disabled>
+          <button className="btn-secondary text-sm ml-auto flex items-center gap-2 opacity-50 cursor-not-allowed" disabled>
             <Download size={14} /> Download
           </button>
         </div>
 
         {/* AI Summary */}
-        <div className="card mb-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Sparkles size={18} className="text-brand-400" />
-              <h2 className="font-semibold text-white">AI Meeting Summary</h2>
-              {aiData && (
-                <span className="badge bg-brand-500/20 text-brand-400 border border-brand-500/30">
-                  {(parseFloat(aiData.confidence) * 100).toFixed(0)}% confidence
-                </span>
-              )}
+        <div className="card mb-6 animate-slide-up bg-gradient-to-br from-brand-600/15 to-brand-600/5 border-brand-600/40" style={{ animationDelay: '50ms' }}>
+          <div className="flex items-center justify-between mb-5 pb-5 border-b border-surface-700/50">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-lg bg-brand-600/30">
+                <Sparkles size={18} className="text-brand-400" />
+              </div>
+              <div>
+                <h2 className="font-semibold text-white">AI Meeting Summary</h2>
+                {aiData && (
+                  <span className="badge bg-brand-500/20 text-brand-400 border border-brand-500/30 text-xs mt-1">
+                    {(parseFloat(aiData.confidence) * 100).toFixed(0)}% confidence
+                  </span>
+                )}
+              </div>
             </div>
             <div className="flex gap-2">
               {aiData && (
-                <button onClick={copyToClipboard} className="btn-ghost text-sm flex items-center gap-1.5">
+                <button onClick={copyToClipboard} className="btn-ghost text-sm flex items-center gap-1.5 hover:bg-surface-700/50">
                   <Copy size={14} /> Copy
                 </button>
               )}
@@ -112,10 +116,12 @@ export default function PostMeetingPage() {
           </div>
 
           {!aiData && !loading && (
-            <div className="text-center py-10 text-slate-500">
-              <Sparkles size={36} className="mx-auto mb-3 text-slate-600" />
-              <p className="font-medium text-slate-400">No summary yet</p>
-              <p className="text-sm mt-1">Click "Generate Summary" to create an AI-powered meeting summary</p>
+            <div className="text-center py-12 text-slate-500">
+              <div className="w-16 h-16 rounded-2xl bg-slate-700/30 flex items-center justify-center mx-auto mb-3">
+                <Sparkles size={32} className="text-slate-600" />
+              </div>
+              <p className="font-semibold text-slate-400">No summary yet</p>
+              <p className="text-sm mt-2">Click "Generate Summary" to create an AI-powered meeting summary</p>
             </div>
           )}
 
@@ -131,13 +137,11 @@ export default function PostMeetingPage() {
 
           {aiData && (
             <div>
-              <p className="text-slate-300 text-sm leading-relaxed">{aiData.summary}</p>
-              <div className="flex items-center gap-2 mt-4 pt-3 border-t border-surface-600">
-                <span className="text-xs text-slate-600">Generated by {aiData.model}</span>
-                <span className="text-slate-700">·</span>
-                <span className="text-xs text-slate-600">
-                  {new Date(aiData.generatedAt).toLocaleString()}
-                </span>
+              <p className="text-slate-300 text-sm leading-relaxed mb-4">{aiData.summary}</p>
+              <div className="flex items-center gap-2 pt-3 border-t border-surface-600/50 text-xs text-slate-600">
+                <span>Generated by <strong>{aiData.model}</strong></span>
+                <span>·</span>
+                <span>{new Date(aiData.generatedAt).toLocaleString()}</span>
               </div>
             </div>
           )}
@@ -145,41 +149,46 @@ export default function PostMeetingPage() {
 
         {/* Action Items */}
         {aiData && (
-          <div className="card animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <div className="flex items-center gap-2 mb-4">
-              <CheckSquare size={18} className="text-emerald-400" />
-              <h2 className="font-semibold text-white">Action Items</h2>
-              <span className="badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                {aiData.actionItems.length} items
-              </span>
+          <div className="card animate-slide-up bg-gradient-to-br from-emerald-600/15 to-emerald-600/5 border-emerald-600/40" style={{ animationDelay: '100ms' }}>
+            <div className="flex items-center gap-3 mb-5 pb-5 border-b border-surface-700/50">
+              <div className="p-2.5 rounded-lg bg-emerald-600/30">
+                <CheckSquare size={18} className="text-emerald-400" />
+              </div>
+              <div>
+                <h2 className="font-semibold text-white">Action Items</h2>
+                <span className="badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs mt-1">
+                  {aiData.actionItems.length} items
+                </span>
+              </div>
             </div>
             <div className="space-y-2">
               {aiData.actionItems.map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3 p-3 rounded-lg bg-surface-700 hover:bg-surface-600 transition-colors group"
+                  className="flex items-start gap-3 p-4 rounded-lg bg-surface-700/30 hover:bg-surface-700/60 transition-all group animate-slide-up"
+                  style={{ animationDelay: `${(i + 2) * 50}ms` }}
                 >
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-colors ${
+                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
                     savedTasks.has(i.toString())
-                      ? 'bg-emerald-500 border-emerald-500'
-                      : 'border-surface-400 group-hover:border-brand-500'
+                      ? 'bg-emerald-500 border-emerald-500 shadow-lg shadow-emerald-500/50'
+                      : 'border-surface-500 group-hover:border-emerald-500/70'
                   }`}>
                     {savedTasks.has(i.toString()) && (
-                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
                     )}
                   </div>
-                  <p className="text-slate-300 text-sm flex-1">{item}</p>
+                  <p className="text-slate-300 text-sm flex-1 pt-1">{item}</p>
                   <button
                     onClick={() => handleSaveTask(item, i)}
                     disabled={savedTasks.has(i.toString()) || savingTask === i.toString()}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity btn-ghost text-xs flex items-center gap-1 py-1 flex-shrink-0"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity btn-ghost text-xs flex items-center gap-1 py-1.5 px-3 flex-shrink-0 whitespace-nowrap hover:bg-emerald-500/20 hover:text-emerald-400"
                   >
                     {savingTask === i.toString() ? (
                       <Loader2 size={12} className="animate-spin" />
                     ) : savedTasks.has(i.toString()) ? (
-                      'Added'
+                      <><CheckSquare size={12} /> Added</>
                     ) : (
                       <><Plus size={12} /> Add Task</>
                     )}
@@ -188,16 +197,16 @@ export default function PostMeetingPage() {
               ))}
             </div>
 
-            <div className="flex gap-3 mt-4 pt-4 border-t border-surface-600">
+            <div className="flex gap-3 mt-6 pt-5 border-t border-surface-600/50">
               <button
                 onClick={() => navigate('/tasks')}
-                className="btn-secondary text-sm flex items-center gap-2"
+                className="btn-secondary text-sm flex items-center gap-2 flex-1"
               >
                 <LayoutDashboard size={14} /> View Task Board
               </button>
               <button
                 onClick={() => navigate('/dashboard')}
-                className="btn-ghost text-sm flex items-center gap-2"
+                className="btn-ghost text-sm flex items-center gap-2 flex-1"
               >
                 <ArrowLeft size={14} /> Back to Dashboard
               </button>

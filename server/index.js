@@ -29,6 +29,9 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/meetings', require('./routes/meetings'));
 app.use('/api/ai', require('./routes/ai'));
 app.use('/api/tasks', require('./routes/tasks'));
+app.use('/api/workspaces', require('./routes/workspaces'));
+app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/analytics', require('./routes/analytics'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'IntellMeet server running' }));
