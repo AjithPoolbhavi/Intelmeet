@@ -1,0 +1,16 @@
+[
+  {
+    "type": "web",
+    "name": "intellmeet-server",
+    "env": "node",
+    "region": "oregon",
+    "plan": "free",
+    "buildCommand": "npm install",
+    "startCommand": "node index.js",
+    "healthCheckPath": "/api/health",
+    "envVars": [
+      { "key": "NODE_ENV", "value": "production" },
+      { "key": "PORT", "value": "10000" }
+    ]
+  }
+]
