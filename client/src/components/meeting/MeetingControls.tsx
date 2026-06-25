@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import {
   Mic, MicOff, Video, VideoOff, Monitor, MonitorOff,
   MessageSquare, Users, Phone, Hand, Smile,
-  Circle, Settings, ChevronUp
+  Circle, Settings, ChevronUp, Edit3
 } from 'lucide-react';
 import { Socket } from 'socket.io-client';
 import { useMeetingStore } from '../../store/meetingStore';
@@ -13,6 +13,8 @@ interface Props {
   meetingId: string;
   socket: Socket | null;
   onLeave: () => void;
+  isWhiteboardOpen: boolean;
+  onToggleWhiteboard: () => void;
 }
 
 const REACTIONS = [
@@ -26,7 +28,7 @@ const REACTIONS = [
   { emoji: '💯', label: 'Perfect' },
 ];
 
-export default function MeetingControls({ meetingId, socket, onLeave }: Props) {
+export default function MeetingControls({ meetingId, socket, onLeave, isWhiteboardOpen, onToggleWhiteboard }: Props) {
   const { user } = useAuthStore();
   const {
     isAudioOn, isVideoOn, isScreenSharing, isChatOpen, isParticipantsOpen,
@@ -302,6 +304,16 @@ export default function MeetingControls({ meetingId, socket, onLeave }: Props) {
             highlightColor="#ef4444"
             isRecordPulse={isRecording}
             onClick={handleRecording}
+          />
+        </CtrlGroup>
+
+        {/* Whiteboard */}
+        <CtrlGroup>
+          <CtrlBtn
+            icon={Edit3}
+            label="Whiteboard"
+            isHighlight={isWhiteboardOpen}
+            onClick={onToggleWhiteboard}
           />
         </CtrlGroup>
 

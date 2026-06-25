@@ -13,6 +13,7 @@ import ChatPanel from '../components/meeting/ChatPanel';
 import ParticipantsPanel from '../components/meeting/ParticipantsPanel';
 import SettingsPanel from '../components/meeting/SettingsPanel';
 import MeetingTopBar from '../components/meeting/MeetingTopBar';
+import WhiteboardPanel from '../components/meeting/WhiteboardPanel';
 import { Loader2 } from 'lucide-react';
 
 export default function MeetingPage() {
@@ -28,6 +29,7 @@ export default function MeetingPage() {
   const socketRef = useRef<Socket | null>(null);
   const [loading, setLoading] = useState(true);
   const [leaving, setLeaving] = useState(false);
+  const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
 
   const { initLocalStream, initiateCall, closePeer, stopLocalStream, remoteStreams } = useWebRTC(
     socketRef.current, meetingId || '', user?.name || 'Guest'
@@ -178,11 +180,21 @@ export default function MeetingPage() {
         `}</style>
         {/* Main video area */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <VideoGrid remoteStreams={remoteStreams} />
+          {isWhiteboardOpen ? (
+            <WhiteboardPanel
+              meetingId={meetingId || ''}
+              socket={socketRef.current}
+              onClose={() => setIsWhiteboardOpen(false)}
+            />
+          ) : (
+            <VideoGrid remoteStreams={remoteStreams} />
+          )}
           <MeetingControls
             meetingId={meetingId || ''}
             socket={socketRef.current}
             onLeave={handleLeaveMeeting}
+            isWhiteboardOpen={isWhiteboardOpen}
+            onToggleWhiteboard={() => setIsWhiteboardOpen(prev => !prev)}
           />
         </div>
 

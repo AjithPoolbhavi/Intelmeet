@@ -95,6 +95,32 @@ module.exports = (io) => {
       }
     });
 
+    // Whiteboard drawing synchronization
+    socket.on('draw', (data) => {
+      try {
+        socket.to(data.meetingId).emit('draw', data);
+      } catch (err) {
+        console.error('Error in draw:', err.message);
+      }
+    });
+
+    socket.on('clear-whiteboard', ({ meetingId }) => {
+      try {
+        socket.to(meetingId).emit('clear-whiteboard');
+      } catch (err) {
+        console.error('Error in clear-whiteboard:', err.message);
+      }
+    });
+
+    // Reactions
+    socket.on('send-reaction', ({ meetingId, emoji, userName }) => {
+      try {
+        io.to(meetingId).emit('receive-reaction', { emoji, userName });
+      } catch (err) {
+        console.error('Error in send-reaction:', err.message);
+      }
+    });
+
     // Media state changes
     socket.on('media-state', ({ meetingId, audio, video }) => {
       try {
