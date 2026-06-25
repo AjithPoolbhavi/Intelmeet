@@ -50,6 +50,11 @@ export default {
           400: '#35354a',
           300: '#454560',
         },
+        'background-main': 'var(--bg-main)',
+        'background-card': 'var(--bg-card)',
+        'border-theme': 'var(--border-color)',
+        'text-main': 'var(--text-main)',
+        'text-muted': 'var(--text-muted)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

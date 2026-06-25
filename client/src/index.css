@@ -2,127 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Light mode global overrides */
-html:not(.dark) body, 
-html:not(.dark) #root,
-html:not(.dark) .bg-\[\#0E0E11\],
-html:not(.dark) .bg-surface-900,
-html:not(.dark) .bg-gradient-to-br {
-  background-color: #f8fafc !important;
-  background-image: none !important;
-  color: #0f172a !important;
+:root {
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --border-color: rgba(15, 23, 42, 0.08);
+  --text-main: #0f172a;
+  --text-muted: #475569;
 }
 
-/* Sidebar overrides */
-html:not(.dark) aside, 
-html:not(.dark) .bg-\[\#111118\] {
-  background-color: #f1f5f9 !important;
-  border-right-color: #e2e8f0 !important;
+.dark {
+  --bg-main: #0B1120;
+  --bg-card: #131B2E;
+  --bg-sidebar: #0f172a;
+  --border-color: rgba(255, 255, 255, 0.05);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
 }
 
-/* Card & Panel backgrounds */
-html:not(.dark) .bg-\[\#16161B\],
-html:not(.dark) .bg-\[\#1A1A22\],
-html:not(.dark) .bg-\[\#1a1a24\],
-html:not(.dark) .bg-\[\#1E1E24\],
-html:not(.dark) .bg-\[\#1e1e24\],
-html:not(.dark) .bg-surface-800,
-html:not(.dark) .bg-surface-700,
-html:not(.dark) .bg-surface-600,
-html:not(.dark) .bg-surface-500,
-html:not(.dark) .backdrop-blur-xl.bg-white\/5 {
-  background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
-}
-
-/* Hover and active states for list items & buttons */
-html:not(.dark) .hover\:bg-slate-800\/40:hover,
-html:not(.dark) .hover\:bg-white\/5:hover,
-html:not(.dark) .hover\:bg-brand-500\/10:hover,
-html:not(.dark) .hover\:bg-surface-700:hover {
-  background-color: #e2e8f0 !important;
-}
-
-/* Text overrides - ensuring high contrast on light backgrounds */
-html:not(.dark) body,
-html:not(.dark) h1,
-html:not(.dark) h2,
-html:not(.dark) h3,
-html:not(.dark) h4,
-html:not(.dark) h5,
-html:not(.dark) h6,
-html:not(.dark) label,
-html:not(.dark) p,
-html:not(.dark) select,
-html:not(.dark) option,
-html:not(.dark) .text-slate-100,
-html:not(.dark) .text-slate-200 {
-  color: #0f172a !important;
-}
-
-/* Gray sub-texts inside cards and forms */
-html:not(.dark) .text-slate-300,
-html:not(.dark) .text-slate-400 {
-  color: #334155 !important; /* slate-700 for high visibility */
-}
-
-html:not(.dark) .text-slate-500 {
-  color: #475569 !important; /* slate-600 for high visibility */
-}
-
-/* White text elements inside dark-turned-white panels must become dark */
-html:not(.dark) .bg-\[\#16161B\] .text-white,
-html:not(.dark) .bg-\[\#1A1A22\] .text-white,
-html:not(.dark) .bg-\[\#1a1a24\] .text-white,
-html:not(.dark) .bg-surface-800 .text-white,
-html:not(.dark) .bg-surface-700 .text-white,
-html:not(.dark) .bg-[#1a1a24] .text-white,
-html:not(.dark) aside .text-slate-200,
-html:not(.dark) aside .text-slate-400 {
-  color: #0f172a !important;
-}
-
-/* But keep white texts on solid color buttons/tiles white */
-html:not(.dark) button.bg-\[\#F26D21\] *,
-html:not(.dark) button.bg-\[\#0E71EB\] *,
-html:not(.dark) button.bg-\[\#30A94E\] *,
-html:not(.dark) .bg-brand-600 *,
-html:not(.dark) .bg-gradient-to-r.from-brand-600.to-brand-700 * {
-  color: #ffffff !important;
-}
-
-/* Form input styling */
-html:not(.dark) input,
-html:not(.dark) select,
-html:not(.dark) textarea,
-html:not(.dark) .bg-\[\#1F1F26\] {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  border: 1px solid #cbd5e1 !important;
-}
-
-html:not(.dark) select option {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-}
-
-html:not(.dark) input::placeholder {
-  color: #94a3b8 !important;
-}
-
-/* Borders */
-html:not(.dark) .border-slate-800,
-html:not(.dark) .border-slate-850,
-html:not(.dark) .border-white\/5,
-html:not(.dark) .border-white\/10 {
-  border-color: #e2e8f0 !important;
-}
-
-/* Custom UI Cards in dashboard & meeting summary */
-html:not(.dark) .bg-gradient-to-r.from-brand-600\/10.to-cyan-500\/10 {
-  background-image: none !important;
-  background-color: #e0f2fe !important;
-  border-color: #bae6fd !important;
+/* Global transitions and base styling */
+body {
+  background-color: var(--bg-main) !important;
+  color: var(--text-main) !important;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Premium micro-animations & transitions */
@@ -131,7 +34,7 @@ html:not(.dark) .bg-gradient-to-r.from-brand-600\/10.to-cyan-500\/10 {
 }
 .hover-glow:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px -10px rgba(14, 113, 235, 0.4) !important;
+  box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.15) !important;
 }
 
 .hover-scale {
@@ -163,3 +66,75 @@ html:not(.dark) .bg-gradient-to-r.from-brand-600\/10.to-cyan-500\/10 {
 .animation-delay-300 { animation-delay: 300ms !important; }
 .animation-delay-400 { animation-delay: 400ms !important; }
 .animation-delay-500 { animation-delay: 500ms !important; }
+
+/* Semantic overrides mapping layout to CSS Variables */
+aside, .bg-\[\#111118\] {
+  background-color: var(--bg-sidebar) !important;
+  border-right: 1px solid var(--border-color) !important;
+}
+
+.bg-\[\#0E0E11\], .bg-surface-900, .bg-[#0d0d0f], .bg-[#0d0d0f]/80 {
+  background-color: var(--bg-main) !important;
+}
+
+.bg-\[\#16161B\], .bg-\[\#1A1A22\], .bg-\[\#1a1a24\], .bg-\[\#1E1E24\], .bg-\[\#1e1e24\], .bg-[#1a1a24], .bg-[#18181b], .bg-[#1c1c1e] {
+  background-color: var(--bg-card) !important;
+}
+
+.border-slate-800, .border-slate-850, .border-white\/5, .border-white\/10 {
+  border-color: var(--border-color) !important;
+}
+
+/* Form input styling overrides */
+input, select, textarea, .bg-\[\#1F1F26\] {
+  background-color: var(--bg-main) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+select option {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+}
+
+input::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7;
+}
+
+/* General Text Contrast */
+.text-white, .text-slate-100, .text-slate-200, h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main) !important;
+}
+
+.text-slate-300, .text-slate-400, .text-slate-500, .text-white\/60, .text-white\/50, .text-white\/40 {
+  color: var(--text-muted) !important;
+}
+
+/* Preserve active selections, buttons and branding text color */
+.text-\[\#0E71EB\], .text-brand-400, .text-[#0E71EB] {
+  color: #6366f1 !important; /* Update blue accent to Indigo */
+}
+
+.bg-\[\#0E71EB\], .bg-[#0E71EB] {
+  background-color: #6366f1 !important; /* Update blue action buttons to Indigo */
+}
+
+.hover\:bg-\[\#0C62CC\]:hover, .hover\:bg-[#0C62CC]:hover {
+  background-color: #4f46e5 !important;
+}
+
+/* Keeping text white on solid brand backgrounds */
+button.bg-\[\#F26D21\] *,
+button.bg-\[\#0E71EB\] *,
+button.bg-\[\#30A94E\] *,
+.bg-[#dc2626] *,
+.bg-[#F26D21] *,
+.bg-[#30A94E] *,
+.bg-[#0E71EB] *,
+.bg-brand-600 *,
+.bg-[#0E71EB]/10 *,
+.bg-gradient-to-r.from-brand-600.to-brand-700 *,
+.bg-gradient-to-r.from-brand-600\/10.to-cyan-500\/10 * {
+  color: #ffffff !important;
+}
