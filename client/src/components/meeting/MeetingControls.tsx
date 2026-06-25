@@ -94,20 +94,45 @@ export default function MeetingControls({ meetingId, socket, onLeave }: Props) {
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      height: '88px',
-      background: '#1c1c1e',
-      borderTop: '1px solid rgba(255,255,255,0.07)',
-      padding: '0 24px',
-      flexShrink: 0,
-      gap: '8px',
-    }}>
+    <>
+      <style>{`
+        @media (max-width: 768px) {
+          .meeting-ctrl-label { display: none !important; }
+          .meeting-ctrl-left { display: none !important; }
+          .meeting-ctrl-right { flex: none !important; }
+          .meeting-leave-btn span { display: none !important; }
+          .meeting-leave-btn {
+            padding: 0 !important;
+            width: 44px !important;
+            height: 44px !important;
+            border-radius: 12px !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+          }
+          .meeting-ctrl-container {
+            justify-content: space-around !important;
+            padding: 0 10px !important;
+            height: 72px !important;
+            gap: 2px !important;
+          }
+          .meeting-ctrl-divider { display: none !important; }
+        }
+      `}</style>
+      <div className="meeting-ctrl-container" style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: '88px',
+        background: '#1c1c1e',
+        borderTop: '1px solid rgba(255,255,255,0.07)',
+        padding: '0 24px',
+        flexShrink: 0,
+        gap: '8px',
+      }}>
 
-      {/* ── Left: status pills ── */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
+        {/* ── Left: status pills ── */}
+        <div className="meeting-ctrl-left" style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94a3b8', fontSize: '13px' }}>
           <Users size={14} style={{ color: '#94a3b8' }} />
           <span style={{ color: '#e2e8f0', fontWeight: 600 }}>{participants.length + 1}</span>
@@ -264,7 +289,9 @@ export default function MeetingControls({ meetingId, socket, onLeave }: Props) {
           />
         </CtrlGroup>
 
-        <Divider />
+        <div className="meeting-ctrl-divider">
+          <Divider />
+        </div>
 
         {/* Record */}
         <CtrlGroup>
@@ -290,9 +317,10 @@ export default function MeetingControls({ meetingId, socket, onLeave }: Props) {
       </div>
 
       {/* ── Right: Leave ── */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>
+      <div className="meeting-ctrl-right" style={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>
         <button
           onClick={onLeave}
+          className="meeting-leave-btn"
           style={{
             display: 'flex', alignItems: 'center', gap: '8px',
             padding: '10px 22px',
@@ -319,6 +347,7 @@ export default function MeetingControls({ meetingId, socket, onLeave }: Props) {
         </button>
       </div>
     </div>
+    </>
   );
 }
 
@@ -423,7 +452,7 @@ function CtrlBtn({
         )}
       </div>
 
-      <span style={{
+      <span className="meeting-ctrl-label" style={{
         fontSize: '11px', color: '#64748b', textAlign: 'center',
         maxWidth: hasChevron ? 70 : 58, lineHeight: 1.2,
         fontWeight: 500, letterSpacing: '0.01em',

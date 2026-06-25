@@ -21,10 +21,14 @@ const navItems = [
   { icon: Settings, label: 'Settings', href: '/settings' },
 ];
 
+import { useUIStore } from '../../store/uiStore';
+import { X } from 'lucide-react';
+
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
+  const { sidebarOpen, toggleSidebar } = useUIStore();
 
   const handleLogout = () => {
     logout();
@@ -35,11 +39,29 @@ export default function Sidebar() {
   const initials = user?.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
 
   return (
-    <aside className="w-64 h-screen flex flex-col bg-[#111118] border-r border-slate-800 fixed left-0 top-0 z-40">
-      {/* Logo */}
-      <div className="p-5 border-b border-slate-850">
-        <Logo size="md" />
-      </div>
+    <>
+      {/* Backdrop for Mobile */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+
+      <aside className={clsx(
+        "w-64 h-screen flex flex-col bg-[#111118] border-r border-slate-800 fixed left-0 top-0 z-40 transition-transform duration-300 ease-in-out md:translate-x-0",
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        {/* Logo & Close Button */}
+        <div className="p-5 border-b border-slate-850 flex items-center justify-between">
+          <Logo size="md" />
+          <button 
+            onClick={toggleSidebar}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 md:hidden"
+          >
+            <X size={18} />
+          </button>
+        </div>
 
       {/* New Meeting Button */}
       <div className="p-4">
@@ -95,5 +117,6 @@ export default function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

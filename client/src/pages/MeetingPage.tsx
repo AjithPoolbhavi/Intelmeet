@@ -162,6 +162,20 @@ export default function MeetingPage() {
       <MeetingTopBar meetingId={meetingId || ''} socket={socketRef.current} />
 
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative' }}>
+        <style>{`
+          @media (max-width: 768px) {
+            .meeting-sidepanel {
+              position: absolute !important;
+              top: 0 !important;
+              bottom: 0 !important;
+              right: 0 !important;
+              width: 100% !important;
+              height: 100% !important;
+              z-index: 25 !important;
+              border-left: none !important;
+            }
+          }
+        `}</style>
         {/* Main video area */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <VideoGrid remoteStreams={remoteStreams} />
@@ -174,7 +188,7 @@ export default function MeetingPage() {
 
         {/* Sidepanel */}
         {hasSidepanel && (
-          <div style={{
+          <div className="meeting-sidepanel" style={{
             width: 320, flexShrink: 0,
             borderLeft: '1px solid rgba(255,255,255,0.07)',
             display: 'flex', flexDirection: 'column',

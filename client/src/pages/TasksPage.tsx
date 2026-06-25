@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { Plus, Trash2, X, Loader2, CheckSquare, Circle, AlertCircle, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Sidebar from '../components/ui/Sidebar';
+import MobileHeader from '../components/ui/MobileHeader';
+
 import { tasksAPI } from '../services/api';
 import { Task } from '../types';
 import clsx from 'clsx';
@@ -90,7 +92,8 @@ export default function TasksPage() {
   return (
     <div className="flex min-h-screen bg-surface-900">
       <Sidebar />
-      <main className="flex-1 ml-64 p-8">
+      <MobileHeader />
+      <main className="flex-1 ml-0 md:ml-64 p-4 md:p-8 pt-20 md:pt-8">
         <div className="mb-8 animate-fade-in">
           <div className="flex items-center justify-between mb-6">
             <div>

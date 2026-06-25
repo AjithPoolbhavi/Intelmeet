@@ -28,17 +28,30 @@ export default function MeetingTopBar({ meetingId, socket }: { meetingId: string
   };
 
   return (
-    <div style={{
-      height: 56,
-      background: '#1c1c1e',
-      borderBottom: '1px solid rgba(255,255,255,0.07)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 20px',
-      flexShrink: 0,
-      zIndex: 30,
-    }}>
+    <>
+      <style>{`
+        @media (max-width: 768px) {
+          .meeting-top-logo-text { display: none !important; }
+          .meeting-top-info-sep { display: none !important; }
+          .meeting-top-badge-hd { display: none !important; }
+          .meeting-top-badge-secure { display: none !important; }
+          .meeting-top-bar-container {
+            padding: 0 10px !important;
+            height: 52px !important;
+          }
+        }
+      `}</style>
+      <div className="meeting-top-bar-container" style={{
+        height: 56,
+        background: '#1c1c1e',
+        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 20px',
+        flexShrink: 0,
+        zIndex: 30,
+      }}>
 
       {/* Left — Logo + Meeting info */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -52,10 +65,10 @@ export default function MeetingTopBar({ meetingId, socket }: { meetingId: string
           }}>
             <span style={{ color: '#fff', fontSize: 14, fontWeight: 700, letterSpacing: '-0.5px' }}>IM</span>
           </div>
-          <span style={{ color: '#fff', fontWeight: 700, fontSize: 15, letterSpacing: '-0.3px' }}>IntellMeet</span>
+          <span className="meeting-top-logo-text" style={{ color: '#fff', fontWeight: 700, fontSize: 15, letterSpacing: '-0.3px' }}>IntellMeet</span>
         </div>
 
-        <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.1)' }} />
+        <div className="meeting-top-info-sep" style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.1)' }} />
 
         {/* Meeting name + ID */}
         <div>
@@ -108,11 +121,11 @@ export default function MeetingTopBar({ meetingId, socket }: { meetingId: string
 
       {/* Right — Status badges */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#22c55e', fontSize: 12 }}>
+        <div className="meeting-top-badge-hd" style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#22c55e', fontSize: 12 }}>
           <Wifi size={13} />
           <span style={{ color: '#94a3b8' }}>HD</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+        <div className="meeting-top-badge-secure" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <Shield size={13} style={{ color: '#22c55e' }} />
           <span style={{ color: '#94a3b8', fontSize: 12 }}>Encrypted</span>
         </div>
@@ -128,5 +141,6 @@ export default function MeetingTopBar({ meetingId, socket }: { meetingId: string
         </div>
       </div>
     </div>
+    </>
   );
 }

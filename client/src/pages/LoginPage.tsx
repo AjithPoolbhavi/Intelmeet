@@ -14,27 +14,24 @@ interface FormErrors {
 export default function LoginPage() {
   const navigate = useNavigate();
   const { setAuth } = useAuthStore();
-  const [form, setForm] = useState({ 
-    email: localStorage.getItem('rememberEmail') || '', 
-    password: '' 
-  });
+  const defaultEmail = localStorage.getItem('rememberEmail') || '';
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [rememberMe, setRememberMe] = useState(!!localStorage.getItem('rememberEmail'));
 
-  const validateForm = () => {
+  const validateForm = (data: { email: string; password?: string }) => {
     const newErrors: FormErrors = {};
     
-    if (!form.email.trim()) {
+    if (!data.email.trim()) {
       newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
       newErrors.email = 'Please enter a valid email';
     }
     
-    if (!form.password) {
+    if (!data.password) {
       newErrors.password = 'Password is required';
-    } else if (form.password.length < 6) {
+    } else if (data.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
     
@@ -42,21 +39,30 @@ export default function LoginPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+    const formData = new FormData(e.currentTarget);
+    const emailVal = (formData.get('email') as string) || '';
+    const passwordVal = (formData.get('password') as string) || '';
+    
+    const loginData = {
+      email: emailVal.trim(),
+      password: passwordVal
+    };
+    
+    if (!validateForm(loginData)) {
       toast.error('Please fix the errors below');
       return;
     }
 
     setLoading(true);
     try {
-      const res = await authAPI.login(form);
+      const res = await authAPI.login(loginData);
       setAuth(res.data.user, res.data.token);
       
       if (rememberMe) {
-        localStorage.setItem('rememberEmail', form.email);
+        localStorage.setItem('rememberEmail', loginData.email);
       } else {
         localStorage.removeItem('rememberEmail');
       }
@@ -76,10 +82,9 @@ export default function LoginPage() {
     }
   };
 
-  const handleInputChange = (field: 'email' | 'password', value: string) => {
-    setForm(f => ({ ...f, [field]: value }));
+  const handleClearError = (field: 'email' | 'password') => {
     if (errors[field]) {
-      setErrors(e => ({ ...e, email: undefined, password: undefined }));
+      setErrors(e => ({ ...e, [field]: undefined }));
     }
   };
 
@@ -129,10 +134,11 @@ export default function LoginPage() {
                   <Mail size={18} className="absolute left-3.5 text-slate-500 group-focus-within:text-brand-400 transition-colors" />
                   <input
                     type="email"
+                    name="email"
                     placeholder="you@company.com"
-                    value={form.email}
-                    onChange={e => handleInputChange('email', e.target.value)}
-                    onFocus={() => setErrors(e => ({ ...e, email: undefined }))}
+                    defaultValue={defaultEmail}
+                    onChange={() => handleClearError('email')}
+                    onFocus={() => handleClearError('email')}
                     autoComplete="email"
                     className={`w-full pl-11 pr-4 py-3 bg-white/5 border rounded-lg text-white placeholder-slate-500 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:bg-white/10 ${
                       errors.email ? 'border-red-500/50 bg-red-500/5' : 'border-white/10 hover:border-white/20'
@@ -162,10 +168,10 @@ export default function LoginPage() {
                   <Lock size={18} className="absolute left-3.5 text-slate-500 group-focus-within:text-brand-400 transition-colors" />
                   <input
                     type={showPass ? 'text' : 'password'}
+                    name="password"
                     placeholder="••••••••"
-                    value={form.password}
-                    onChange={e => handleInputChange('password', e.target.value)}
-                    onFocus={() => setErrors(e => ({ ...e, password: undefined }))}
+                    onChange={() => handleClearError('password')}
+                    onFocus={() => handleClearError('password')}
                     autoComplete="current-password"
                     className={`w-full pl-11 pr-12 py-3 bg-white/5 border rounded-lg text-white placeholder-slate-500 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:bg-white/10 ${
                       errors.password ? 'border-red-500/50 bg-red-500/5' : 'border-white/10 hover:border-white/20'

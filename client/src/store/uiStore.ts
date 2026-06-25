@@ -15,12 +15,29 @@ export const useThemeStore = create<ThemeState>((set) => ({
   isDark: true,
   setTheme: (theme) => {
     localStorage.setItem('intellmeet-theme', theme);
+    const root = window.document.documentElement;
+    if (
+      theme === 'dark' ||
+      (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
     set({ theme });
   },
   toggleTheme: () => {
-    set((state) => ({
-      theme: state.theme === 'dark' ? 'light' : 'dark',
-    }));
+    set((state) => {
+      const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('intellmeet-theme', nextTheme);
+      const root = window.document.documentElement;
+      if (nextTheme === 'dark') {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+      return { theme: nextTheme };
+    });
   },
 }));
 

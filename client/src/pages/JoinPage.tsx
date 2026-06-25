@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Video, ArrowRight } from 'lucide-react';
 import Sidebar from '../components/ui/Sidebar';
+import MobileHeader from '../components/ui/MobileHeader';
 import toast from 'react-hot-toast';
 
 export default function JoinPage() {
@@ -18,7 +19,8 @@ export default function JoinPage() {
   return (
     <div className="flex min-h-screen bg-surface-900">
       <Sidebar />
-      <main className="flex-1 ml-64 flex items-center justify-center p-8">
+      <MobileHeader />
+      <main className="flex-1 ml-0 md:ml-64 flex items-center justify-center p-4 md:p-8 pt-20 md:pt-8">
         <div className="w-full max-w-md animate-fade-in">
           <div className="card bg-gradient-to-br from-brand-600/15 to-brand-600/5 border-brand-600/40">
             <div className="flex items-center justify-center mb-8">

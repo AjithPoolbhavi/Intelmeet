@@ -3,6 +3,7 @@ import { BarChart2, TrendingUp, Users, Clock, Zap, Video, CheckSquare, ShieldChe
 import { meetingsAPI, tasksAPI } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 import Sidebar from '../components/ui/Sidebar';
+import MobileHeader from '../components/ui/MobileHeader';
 import { Meeting } from '../types';
 
 export default function AnalyticsPage() {
@@ -47,7 +48,8 @@ export default function AnalyticsPage() {
   return (
     <div className="flex min-h-screen bg-[#0E0E11] text-slate-200">
       <Sidebar />
-      <main className="flex-1 ml-64 p-8 max-w-6xl mx-auto w-full">
+      <MobileHeader />
+      <main className="flex-1 ml-0 md:ml-64 p-4 md:p-8 pt-20 md:pt-8 max-w-6xl mx-auto w-full">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-extrabold text-white flex items-center gap-3">

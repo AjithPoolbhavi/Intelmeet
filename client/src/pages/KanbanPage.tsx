@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Sidebar from '../components/ui/Sidebar';
+import MobileHeader from '../components/ui/MobileHeader';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { Task } from '../types';
@@ -81,7 +82,8 @@ export default function KanbanPage() {
   return (
     <div className="flex h-screen bg-[#0E0E11] text-slate-200 overflow-hidden">
       <Sidebar />
-      <main className="flex-1 overflow-auto p-8 flex flex-col max-w-6xl mx-auto w-full">
+      <MobileHeader />
+      <main className="flex-1 overflow-auto ml-0 md:ml-64 p-4 md:p-8 pt-20 md:pt-8 flex flex-col max-w-6xl mx-auto w-full">
         <div className="mb-8 animate-fade-in">
           <div className="flex items-center justify-between mb-6">
             <div>
