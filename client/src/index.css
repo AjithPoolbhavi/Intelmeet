@@ -220,6 +220,243 @@ html:not(.dark) .bg-gradient-to-r.from-brand-600\/10.to-cyan-500\/10 {
 }
 
 /* ──────────────────────────────────────────────────────
+   Light Mode: Comprehensive Color Fixes
+────────────────────────────────────────────────────── */
+
+/* 1. Clock/hero gradient cards that use dark gradients — override to light */
+html:not(.dark) .from-indigo-950,
+html:not(.dark) .from-slate-900,
+html:not(.dark) .via-slate-900,
+html:not(.dark) .to-cyan-950,
+html:not(.dark) .from-indigo-950.via-slate-900.to-cyan-950 {
+  background-image: none !important;
+  background-color: #eef2ff !important;
+}
+/* Keep text readable on that light card */
+html:not(.dark) .from-indigo-950 .text-white,
+html:not(.dark) .from-indigo-950 h1,
+html:not(.dark) .from-indigo-950 p {
+  color: #1e1b4b !important;
+}
+html:not(.dark) .from-indigo-950 .text-slate-400,
+html:not(.dark) .from-indigo-950 .text-slate-200 {
+  color: #4c1d95 !important;
+}
+
+/* 2. Tab badges: bg-slate-800 → light bg */
+html:not(.dark) .bg-slate-800 {
+  background-color: #e2e8f0 !important;
+}
+html:not(.dark) .bg-slate-800.text-slate-500,
+html:not(.dark) .bg-slate-800 .text-slate-500,
+html:not(.dark) .bg-slate-800 {
+  color: #475569 !important;
+}
+
+/* 3. Sidebar nav: hover:bg-slate-800\/40 */
+html:not(.dark) .hover\:bg-slate-800\/40:hover {
+  background-color: rgba(99, 102, 241, 0.08) !important;
+}
+html:not(.dark) .hover\:text-slate-200:hover {
+  color: #1e293b !important;
+}
+
+/* 4. border-surface-600 in sidebar footer */
+html:not(.dark) .border-surface-600 {
+  border-color: var(--border-color) !important;
+}
+
+/* 5. hover:bg-surface-700 in logout button */
+html:not(.dark) .hover\:bg-surface-700:hover {
+  background-color: #e2e8f0 !important;
+}
+
+/* 6. hover:bg-[#288F41] green button hover */
+html:not(.dark) .hover\:bg-\[\#288F41\]:hover {
+  background-color: #16a34a !important;
+}
+html:not(.dark) .hover\:bg-\[\#E05A12\]:hover {
+  background-color: #ea580c !important;
+}
+
+/* 7. border-indigo-900\/30 on clock card */
+html:not(.dark) .border-indigo-900\/30 {
+  border-color: #c7d2fe !important;
+}
+
+/* 8. bg-[#0E71EB]\/10 badge containers: keep brand tint */
+html:not(.dark) .bg-\[\#0E71EB\]\/10,
+html:not(.dark) .bg-\[\#0E71EB\]\/15,
+html:not(.dark) .bg-\[\#0E71EB\]\/20,
+html:not(.dark) .bg-\[\#0E71EB\]\/25 {
+  background-color: rgba(99, 102, 241, 0.12) !important;
+}
+
+/* 9. border-[#0E71EB]\/20, \/30 for badge borders */
+html:not(.dark) .border-\[\#0E71EB\]\/20,
+html:not(.dark) .border-\[\#0E71EB\]\/30 {
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+/* 10. border-slate-800\/80 and \/60 nested border shades */
+html:not(.dark) .border-slate-800\/80,
+html:not(.dark) .border-slate-800\/60 {
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+/* 11. bg-black\/60 mobile sidebar backdrop */
+html:not(.dark) .bg-black\/60 {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 12. Absolute bg blobs on auth pages — make invisible in light */
+html:not(.dark) .bg-brand-600\/15,
+html:not(.dark) .bg-cyan-500\/10,
+html:not(.dark) .bg-purple-500\/5 {
+  opacity: 0.25 !important;
+}
+
+/* 13. glass / backdrop cards on auth pages */
+html:not(.dark) .bg-white\/5 {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08) !important;
+}
+html:not(.dark) .border-white\/10 {
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+/* 14. text-[#0E71EB] → keep brand indigo in light */
+html:not(.dark) .text-\[\#0E71EB\] {
+  color: #4f46e5 !important;
+}
+
+/* 15. Kanban column borders */
+html:not(.dark) .border-slate-700 {
+  border-color: #cbd5e1 !important;
+}
+html:not(.dark) .hover\:border-slate-700:hover {
+  border-color: #94a3b8 !important;
+}
+
+/* 16. text-slate-500 in light mode — ensure readable */
+html:not(.dark) .text-slate-500 {
+  color: #64748b !important;
+}
+
+/* 17. font-mono text in personal room PMI */
+html:not(.dark) .font-mono.text-white {
+  color: #0f172a !important;
+}
+
+/* 18. Dividers */
+html:not(.dark) .border-white\/5 {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* 19. bg-white\/10 on action tile icon wrappers → keep visible */
+html:not(.dark) button.bg-\[\#F26D21\] .bg-white\/10,
+html:not(.dark) button.bg-\[\#0E71EB\] .bg-white\/10,
+html:not(.dark) button.bg-\[\#30A94E\] .bg-white\/10 {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 20. Modals backdrop */
+html:not(.dark) .bg-black\/80,
+html:not(.dark) .bg-black\/70,
+html:not(.dark) .bg-black\/50 {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 21. Modal cards (dark bg-[#16161B] divs inside fixed overlays) */
+html:not(.dark) .fixed .bg-\[\#16161B\],
+html:not(.dark) .fixed .bg-\[\#1A1A22\] {
+  background-color: #ffffff !important;
+  box-shadow: 0 25px 50px rgba(15, 23, 42, 0.15) !important;
+}
+
+/* 22. Badge count text-slate-500 inside bg-slate-800 */
+html:not(.dark) span.bg-slate-800 {
+  background-color: #dde3ec !important;
+  color: #475569 !important;
+}
+
+/* 23. Navigation link active indicator line */
+html:not(.dark) .bg-\[\#0E71EB\] {
+  background-color: #4f46e5 !important;
+}
+
+/* 24. from-brand-500.to-brand-700 avatar gradient — preserve */
+html:not(.dark) .from-brand-500.to-brand-700 {
+  background-image: linear-gradient(to bottom right, #8b5cf6, #6d28d9) !important;
+}
+html:not(.dark) .from-brand-500.to-brand-700 .text-white {
+  color: #ffffff !important;
+}
+
+/* 25. Chart tooltips — bg-slate-900 border-slate-700 */
+html:not(.dark) .bg-slate-900 {
+  background-color: #1e293b !important;
+}
+html:not(.dark) .bg-slate-900.text-white,
+html:not(.dark) .bg-slate-900 .text-white {
+  color: #f8fafc !important;
+}
+
+/* 26. Progress bar tracks */
+html:not(.dark) .bg-slate-800.h-2,
+html:not(.dark) .h-2.bg-slate-800 {
+  background-color: #e2e8f0 !important;
+}
+
+/* 27. border-slate-850 (custom shade) */
+html:not(.dark) .border-slate-850 {
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+/* 28. Color-tinted stat icon bg badges in Analytics */
+html:not(.dark) .bg-emerald-400\/10 {
+  background-color: rgba(52, 211, 153, 0.12) !important;
+}
+html:not(.dark) .border-emerald-400\/20 {
+  border-color: rgba(52, 211, 153, 0.3) !important;
+}
+html:not(.dark) .bg-amber-400\/10 {
+  background-color: rgba(251, 191, 36, 0.12) !important;
+}
+html:not(.dark) .border-amber-400\/20 {
+  border-color: rgba(251, 191, 36, 0.3) !important;
+}
+html:not(.dark) .bg-purple-400\/10 {
+  background-color: rgba(192, 132, 252, 0.12) !important;
+}
+html:not(.dark) .border-purple-400\/20 {
+  border-color: rgba(192, 132, 252, 0.3) !important;
+}
+
+/* 29. Kanban column from-slate-600\/5 to-slate-650\/5 */
+html:not(.dark) .from-slate-600\/5 {
+  --tw-gradient-from: rgba(71, 85, 105, 0.05) !important;
+}
+
+/* 30. Ensure emerald/amber/purple text stays on light bg */
+html:not(.dark) .text-emerald-400 {
+  color: #059669 !important;
+}
+html:not(.dark) .text-amber-400 {
+  color: #d97706 !important;
+}
+html:not(.dark) .text-purple-400 {
+  color: #7c3aed !important;
+}
+html:not(.dark) .text-red-400 {
+  color: #dc2626 !important;
+}
+
+
+
+
+
+/* ──────────────────────────────────────────────────────
    Premium Micro-animations
 ────────────────────────────────────────────────────── */
 .hover-glow {
