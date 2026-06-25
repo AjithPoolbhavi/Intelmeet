@@ -10,36 +10,51 @@ interface ThemeState {
   toggleTheme: () => void;
 }
 
-export const useThemeStore = create<ThemeState>((set) => ({
-  theme: (localStorage.getItem('intellmeet-theme') as Theme) || 'dark',
-  isDark: true,
-  setTheme: (theme) => {
-    localStorage.setItem('intellmeet-theme', theme);
-    const root = window.document.documentElement;
-    if (
-      theme === 'dark' ||
-      (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    set({ theme });
-  },
-  toggleTheme: () => {
-    set((state) => {
-      const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('intellmeet-theme', nextTheme);
-      const root = window.document.documentElement;
-      if (nextTheme === 'dark') {
-        root.classList.add('dark');
-      } else {
-        root.classList.remove('dark');
-      }
-      return { theme: nextTheme };
-    });
-  },
-}));
+// ── Theme Store ──────────────────────────────────────────────────────────────
+
+function applyTheme(theme: Theme): boolean {
+  const root = window.document.documentElement;
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = theme === 'dark' || (theme === 'auto' && prefersDark);
+  if (isDark) {
+    root.classList.add('dark');
+  } else {
+    root.classList.remove('dark');
+  }
+  return isDark;
+}
+
+// Listen for system preference changes when in 'auto' mode
+if (typeof window !== 'undefined') {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    const saved = localStorage.getItem('intellmeet-theme') as Theme | null;
+    if (saved === 'auto') applyTheme('auto');
+  });
+}
+
+export const useThemeStore = create<ThemeState>((set) => {
+  const savedTheme = (localStorage.getItem('intellmeet-theme') as Theme) || 'dark';
+  const isDark = applyTheme(savedTheme);
+  return {
+    theme: savedTheme,
+    isDark,
+    setTheme: (theme) => {
+      localStorage.setItem('intellmeet-theme', theme);
+      const isDark = applyTheme(theme);
+      set({ theme, isDark });
+    },
+    toggleTheme: () => {
+      set((state) => {
+        const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('intellmeet-theme', nextTheme);
+        const isDark = applyTheme(nextTheme);
+        return { theme: nextTheme, isDark };
+      });
+    },
+  };
+});
+
+
 
 interface PreferencesState {
   autoJoinMeeting: boolean;

@@ -2,25 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ──────────────────────────────────────────────────────
+   CSS Custom Properties — Light & Dark Themes
+────────────────────────────────────────────────────── */
 :root {
   --bg-main: #f8fafc;
   --bg-card: #ffffff;
+  --bg-card-alt: #f1f5f9;
   --bg-sidebar: #f1f5f9;
-  --border-color: rgba(15, 23, 42, 0.08);
+  --bg-input: #f1f5f9;
+  --border-color: rgba(15, 23, 42, 0.10);
   --text-main: #0f172a;
   --text-muted: #475569;
+  --text-subtle: #64748b;
 }
 
 .dark {
   --bg-main: #0B1120;
   --bg-card: #131B2E;
+  --bg-card-alt: #1a2236;
   --bg-sidebar: #0f172a;
-  --border-color: rgba(255, 255, 255, 0.05);
+  --bg-input: #1F1F26;
+  --border-color: rgba(255, 255, 255, 0.06);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
+  --text-subtle: #64748b;
 }
 
-/* Global transitions and base styling */
+/* ──────────────────────────────────────────────────────
+   Global Base
+────────────────────────────────────────────────────── */
 body {
   background-color: var(--bg-main) !important;
   color: var(--text-main) !important;
@@ -28,7 +39,189 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-/* Premium micro-animations & transitions */
+/* ──────────────────────────────────────────────────────
+   Background Color Overrides
+────────────────────────────────────────────────────── */
+
+/* Page-level backgrounds */
+.bg-\[\#0E0E11\],
+.bg-\[\#0d0d0f\],
+.bg-\[\#0B1120\],
+.bg-surface-900 {
+  background-color: var(--bg-main) !important;
+}
+
+/* Primary card / panel backgrounds */
+.bg-\[\#16161B\],
+.bg-\[\#1A1A22\],
+.bg-\[\#1a1a24\],
+.bg-\[\#1E1E24\],
+.bg-\[\#1e1e24\],
+.bg-\[\#18181b\],
+.bg-\[\#1c1c1e\],
+.bg-surface-800 {
+  background-color: var(--bg-card) !important;
+}
+
+/* Secondary / nested card backgrounds */
+.bg-\[\#1F1F26\],
+.bg-\[\#25252F\],
+.bg-\[\#2C2C36\],
+.bg-\[\#22222f\],
+.bg-surface-700 {
+  background-color: var(--bg-card-alt) !important;
+}
+
+/* Sidebar */
+aside,
+.bg-\[\#111118\] {
+  background-color: var(--bg-sidebar) !important;
+  border-right: 1px solid var(--border-color) !important;
+}
+
+/* ──────────────────────────────────────────────────────
+   Border Overrides
+────────────────────────────────────────────────────── */
+.border-slate-800,
+.border-slate-850,
+.border-slate-750,
+.border-white\/5,
+.border-white\/10 {
+  border-color: var(--border-color) !important;
+}
+
+/* ──────────────────────────────────────────────────────
+   Form Controls
+────────────────────────────────────────────────────── */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select,
+textarea {
+  background-color: var(--bg-input) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+select option {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.8;
+}
+
+/* ──────────────────────────────────────────────────────
+   Text Contrast
+────────────────────────────────────────────────────── */
+
+/* High-contrast / primary text */
+.text-white,
+.text-slate-100,
+.text-slate-200,
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main) !important;
+}
+
+/* Medium contrast / secondary text */
+.text-slate-300,
+.text-slate-400 {
+  color: var(--text-muted) !important;
+}
+
+/* Low contrast / subtle text */
+.text-slate-500,
+.text-white\/60,
+.text-white\/50,
+.text-white\/40 {
+  color: var(--text-subtle) !important;
+}
+
+/* ──────────────────────────────────────────────────────
+   Brand / Accent Color Preservation
+────────────────────────────────────────────────────── */
+.text-\[\#0E71EB\],
+.text-brand-400,
+.text-brand-500 {
+  color: #6366f1 !important;
+}
+
+.bg-\[\#0E71EB\] {
+  background-color: #6366f1 !important;
+}
+
+.hover\:bg-\[\#0C62CC\]:hover {
+  background-color: #4f46e5 !important;
+}
+
+/* ──────────────────────────────────────────────────────
+   Solid-Color Buttons — Always White Text
+────────────────────────────────────────────────────── */
+button.bg-\[\#0E71EB\],
+button.bg-\[\#F26D21\],
+button.bg-\[\#30A94E\],
+button.bg-\[\#E05A12\],
+button.bg-\[\#dc2626\],
+a.bg-\[\#0E71EB\],
+a.bg-\[\#F26D21\],
+a.bg-\[\#30A94E\] {
+  color: #ffffff !important;
+}
+
+button.bg-\[\#0E71EB\] *,
+button.bg-\[\#F26D21\] *,
+button.bg-\[\#30A94E\] *,
+button.bg-\[\#E05A12\] *,
+button.bg-\[\#dc2626\] *,
+a.bg-\[\#0E71EB\] *,
+a.bg-\[\#F26D21\] * {
+  color: #ffffff !important;
+}
+
+/* Gradient brand buttons — always white */
+.bg-gradient-to-r.from-brand-600,
+.from-brand-600.to-brand-700,
+.from-brand-600.to-brand-800 {
+  color: #ffffff !important;
+}
+.bg-gradient-to-r.from-brand-600 *,
+.from-brand-600.to-brand-700 *,
+.from-brand-600.to-brand-800 * {
+  color: #ffffff !important;
+}
+
+/* ──────────────────────────────────────────────────────
+   Light Mode: Force Text Visibility in Dark-bg Elements
+────────────────────────────────────────────────────── */
+html:not(.dark) .bg-\[\#16161B\] .text-white,
+html:not(.dark) .bg-\[\#16161B\] .text-slate-200,
+html:not(.dark) .bg-\[\#16161B\] .text-slate-400,
+html:not(.dark) .bg-\[\#1A1A22\] .text-white,
+html:not(.dark) .bg-\[\#1A1A22\] .text-slate-200,
+html:not(.dark) .bg-\[\#1A1A22\] .text-slate-400,
+html:not(.dark) .bg-\[\#1F1F26\] .text-white,
+html:not(.dark) .bg-\[\#1F1F26\] .text-slate-200,
+html:not(.dark) .bg-\[\#1F1F26\] .text-slate-400,
+html:not(.dark) .bg-surface-800 .text-white,
+html:not(.dark) .bg-surface-700 .text-white,
+html:not(.dark) aside .text-white,
+html:not(.dark) aside .text-slate-200,
+html:not(.dark) aside .text-slate-400 {
+  color: #0f172a !important;
+}
+
+/* Light mode: AI summary / gradient cards */
+html:not(.dark) .bg-gradient-to-r.from-brand-600\/10.to-cyan-500\/10 {
+  background-image: none !important;
+  background-color: #eff6ff !important;
+  border-color: #bfdbfe !important;
+  color: #0f172a !important;
+}
+
+/* ──────────────────────────────────────────────────────
+   Premium Micro-animations
+────────────────────────────────────────────────────── */
 .hover-glow {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
@@ -66,75 +259,3 @@ body {
 .animation-delay-300 { animation-delay: 300ms !important; }
 .animation-delay-400 { animation-delay: 400ms !important; }
 .animation-delay-500 { animation-delay: 500ms !important; }
-
-/* Semantic overrides mapping layout to CSS Variables */
-aside, .bg-\[\#111118\] {
-  background-color: var(--bg-sidebar) !important;
-  border-right: 1px solid var(--border-color) !important;
-}
-
-.bg-\[\#0E0E11\], .bg-surface-900, .bg-[#0d0d0f], .bg-[#0d0d0f]/80 {
-  background-color: var(--bg-main) !important;
-}
-
-.bg-\[\#16161B\], .bg-\[\#1A1A22\], .bg-\[\#1a1a24\], .bg-\[\#1E1E24\], .bg-\[\#1e1e24\], .bg-[#1a1a24], .bg-[#18181b], .bg-[#1c1c1e] {
-  background-color: var(--bg-card) !important;
-}
-
-.border-slate-800, .border-slate-850, .border-white\/5, .border-white\/10 {
-  border-color: var(--border-color) !important;
-}
-
-/* Form input styling overrides */
-input, select, textarea, .bg-\[\#1F1F26\] {
-  background-color: var(--bg-main) !important;
-  color: var(--text-main) !important;
-  border: 1px solid var(--border-color) !important;
-}
-
-select option {
-  background-color: var(--bg-card) !important;
-  color: var(--text-main) !important;
-}
-
-input::placeholder {
-  color: var(--text-muted) !important;
-  opacity: 0.7;
-}
-
-/* General Text Contrast */
-.text-white, .text-slate-100, .text-slate-200, h1, h2, h3, h4, h5, h6 {
-  color: var(--text-main) !important;
-}
-
-.text-slate-300, .text-slate-400, .text-slate-500, .text-white\/60, .text-white\/50, .text-white\/40 {
-  color: var(--text-muted) !important;
-}
-
-/* Preserve active selections, buttons and branding text color */
-.text-\[\#0E71EB\], .text-brand-400, .text-[#0E71EB] {
-  color: #6366f1 !important; /* Update blue accent to Indigo */
-}
-
-.bg-\[\#0E71EB\], .bg-[#0E71EB] {
-  background-color: #6366f1 !important; /* Update blue action buttons to Indigo */
-}
-
-.hover\:bg-\[\#0C62CC\]:hover, .hover\:bg-[#0C62CC]:hover {
-  background-color: #4f46e5 !important;
-}
-
-/* Keeping text white on solid brand backgrounds */
-button.bg-\[\#F26D21\] *,
-button.bg-\[\#0E71EB\] *,
-button.bg-\[\#30A94E\] *,
-.bg-[#dc2626] *,
-.bg-[#F26D21] *,
-.bg-[#30A94E] *,
-.bg-[#0E71EB] *,
-.bg-brand-600 *,
-.bg-[#0E71EB]/10 *,
-.bg-gradient-to-r.from-brand-600.to-brand-700 *,
-.bg-gradient-to-r.from-brand-600\/10.to-cyan-500\/10 * {
-  color: #ffffff !important;
-}
