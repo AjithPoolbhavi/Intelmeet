@@ -124,3 +124,42 @@ html:not(.dark) .bg-gradient-to-r.from-brand-600\/10.to-cyan-500\/10 {
   background-color: #e0f2fe !important;
   border-color: #bae6fd !important;
 }
+
+/* Premium micro-animations & transitions */
+.hover-glow {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.hover-glow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px -10px rgba(14, 113, 235, 0.4) !important;
+}
+
+.hover-scale {
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.hover-scale:hover {
+  transform: scale(1.03);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+.animate-pulse-soft {
+  animation: pulse-soft 2.5s ease-in-out infinite;
+}
+
+/* Staggered delay helpers */
+.animation-delay-100 { animation-delay: 100ms !important; }
+.animation-delay-200 { animation-delay: 200ms !important; }
+.animation-delay-300 { animation-delay: 300ms !important; }
+.animation-delay-400 { animation-delay: 400ms !important; }
+.animation-delay-500 { animation-delay: 500ms !important; }

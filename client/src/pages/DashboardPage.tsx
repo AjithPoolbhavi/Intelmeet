@@ -218,7 +218,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Tabs & List Section */}
-            <div className="bg-[#16161B] border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+            <div className="bg-[#16161B] border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover-glow transition-all duration-300">
               {/* Tab Header */}
               <div className="flex border-b border-slate-800 bg-[#1A1A22] px-6">
                 {[
@@ -335,10 +335,10 @@ export default function DashboardPage() {
           {/* Right Panel: Digital Clock & Upcoming Cards */}
           <div className="space-y-6 animate-fade-in" style={{ animationDelay: '100ms' }}>
             {/* Real-time Clock Card */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-slate-900 to-cyan-950 border border-indigo-900/30 rounded-3xl p-8 shadow-2xl flex flex-col justify-between min-h-[220px]">
+            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-slate-900 to-cyan-950 border border-indigo-900/30 rounded-3xl p-8 shadow-2xl flex flex-col justify-between min-h-[220px] hover-glow transition-all duration-300">
               {/* Background abstract shapes */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#0E71EB]/10 rounded-full blur-2xl" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-600/10 rounded-full blur-2xl" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#0E71EB]/10 rounded-full blur-2xl animate-pulse-soft" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-600/10 rounded-full blur-2xl animate-pulse-soft" />
 
               <div>
                 <p className="text-5xl font-extrabold text-white tracking-tight font-mono">
@@ -356,7 +356,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Upcoming Agenda Section */}
-            <div className="bg-[#16161B] border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+            <div className="bg-[#16161B] border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4 hover-glow transition-all duration-300">
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 className="font-bold text-white text-sm flex items-center gap-1.5">
                   <Clock size={16} className="text-[#0E71EB]" /> Today's Agenda
